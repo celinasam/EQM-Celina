@@ -1,0 +1,171 @@
+\section{Proposta}
+
+\subsection{Objetivos}
+
+Esta proposta apresentará uma análise da viabilidade da implementação
+prática de várias técnicas de codificação por apagamento no HDFS, as
+alterações no Hadoop e a eficácia dessas alterações. Esta proposta é
+uma contribuição para \emph{software} livre em sistemas distribuídos.
+
+O objetivo do uso da codificação é reduzir o tamanho do armazenamento
+utilizando para isso a redução do fator de replicação de um bloco e
+codificação de um conjunto de blocos (a partir de um bloco inicial) de
+tal modo que a probabilidade de falha de um bloco permaneça a mesma
+que antes ou diminua.
+
+Os testes serão feitos para mostrar a eficácia das alterações no HDFS:
+quanto de espaço em disco foi economizado e o tempo de latência de
+leitura de arquivos. Também está prevista a implementação e validação
+em software dos algoritmos RS e Tornado, que possibilitará a validação
+da funcionalidade desses algoritmos.
+
+\subsection{Métodos}
+
+Este trabalho irá estender e alterar código fonte distribuído sob a
+licença Apache. Espera-se a interação e colaboração com os
+desenvolvedores. Atualmente, Rodrigo Malta Schimdt, ex-aluno do
+Instituto de Computação da Unicamp e um dos responsáveis pela inclusão
+de técnicas de codificação por apagamento no HDFS tem contribuído com
+várias ideias para a realização deste trabalho.
+
+Os testes poderão utilizar:
+
+\begin{itemize}
+\item máquinas do Instituto de Computação da Unicamp, principalmente
+  do LSD (Laboratório de Sistemas Distribuídos);
+\item máquinas do ambiente computacional do CENAPAD-SP (Centro
+  Nacional de Processamento de Alto Desempenho em São Paulo)
+\item a nuvem do AWS (Amazon \emph{Web Services}).
+\end{itemize}
+
+Na tabela~\ref{tab2:ccr} o Modelo 1 é modelo atual do HDFS, o Modelo 2
+é modelo em implementação com característica HDFS-503
+\cite{HDFS-503:2010} e as Propostas 3, 4 e 5 são propostas de
+implementação de algoritmos de codificação para este trabalho. A
+disponibilidade, a probabilidade de corrupção de um arquivo e o espaço
+de armazenamento foram adaptadas de \cite{MR-1969:2010} e de
+\cite{Bhagwan:2003}. A possibilidade de falhas nas máquinas estão
+atreladas a uma boa escolha da distribuição dos blocos pelos
+dispositivos de armazenamento.
+
+\begin{table}
+
+{\small
+
+\singlespacing
+
+  \begin{center}
+    \begin{tabular}{|p{2.0cm}||p{3cm}||p{3cm}||p{2.5cm}||p{2.0cm}|} \hline
+
+Proposta/ Modelo & Codificação\phantom{\Large X} & Disponibilidade & Probabilidade de corrupção de um arquivo & Espaço de armazenamento \\ \hline
+
+1\phantom{\Large X}  & sem codificação, fator replicação = $n$ & baixa em relação ao espaço de armazenamento & $O(p^n)$ & $nx$ \\[2pt] \hline
+
+2\phantom{\Large X}  & Códigos RAID, 1 bloco de paridade, stripe = 10 blocos, fator replicação = 2 & permite falha em 1 máquina  & $O(p^4)$ & $2.2x$ \\ \hline
+
+3\phantom{\Large X} & Códigos RS RAID, 4 blocos de paridade, stripe = 10 blocos, fator replicação = 1 & permite falha em 3 máquinas & $O(p^5)$ & $1.4x$ \\ \hline
+
+4\phantom{\Large X} & Códigos RS, 4 blocos de paridade, fator replicação = 1, com $n$ máquinas & permite falha em até $(3m + 1)$ máquinas & $\Omega(p^{3m+2})$ & até $5x$ \\ \hline
+
+5\phantom{\Large X} & Códigos Tornado, 4 blocos de paridade, fator replicação = 1, com $n$ máquinas & permite falha em até $(3m + 1)$ máquinas & $\Omega(p^{3m+2})$ & até $5x$ \\ \hline
+
+    \end{tabular}
+\caption{Comparação entre algoritmos de codificação por apagamento e replicação}
+\label{tab2:ccr}
+  \end{center}
+
+em que:\\
+%$O$ e $\Omega$: notação assintótica, significando \emph{upper bound} e \emph{lower bound} respectivamente\\
+$p$ = probabilidade de perda do bloco, $0 < p < 1$\\
+$x$ = tamanho do armazenamento em disco de um bloco\\
+$m$ = número de fragmentos do bloco inicial antes da codificação\\
+$n = 4m$ é número de blocos codificados a partir a um bloco inicial; o bloco codificado $b_{i}$ está armazenado na máquina $d_{i}$, para $1 \leq i \leq m$; o bloco inicial e a primeira réplica estão na máquina $d1$\\
+}
+
+\end{table}
+
+\subsection{Forma de Análise dos Resultados}
+
+Nós poderemos utilizar alguns \emph{ebooks} do Projeto Gutenberg e do
+Portal Domínio Público como entrada de dados de alguns dos testes:
+
+\begin{itemize}
+   
+\item {Teste de funcionalidade dos algoritmos de codificação e de
+    decodificação RS e de outra codificação como Tornado}
+
+     % com dois PCs interconectados (via porta serial, padrão RS-232 ou
+     % via porta USB), sob sistema operacional GNU/Linux e e representar
+     % o que acontece de algum modo: arquivo de log, animação.
+
+   \item {Teste \emph{cluster} Hadoop  0.21.0} que utiliza apenas replicação
+
+   \item {Teste \emph{cluster} Hadoop 0.21.0 com característica
+       HDFS-503} que utiliza replicação e codificação por apagamento
+     \cite{HDFS-503:2010}
+
+\end{itemize}
+
+% Este \emph{patch} pretende implementar uma camada opcional de
+% codificação por apagamento sob o HDFS. O objetivo deste \emph{patch} é
+% reduzir o volume de armazenamento do HDFS.
+
+% É possível que sejam usados entrada de dados como imagens, desde que
+% possam ser disponibilizadas nas máquinas utilizadas nos testes: dados
+% dos laboratórios do IC-Unicamp e da Embrapa.
+
+Estamos prevendo duas fases de teste:
+
+\begin{description}
+
+   \item [testes de funcionalidade e de injeção de falhas] testar os algoritmos que criam  os blocos codificados (dados e paridade) e os mantêm; testar os algoritmos que atendem os pedidos de leitura (réplica); testar os algoritmos que percebem réplicas indisponíveis e as reconstroem a partir dos blocos codificados (para isso utilizar possivelmente o Zookeeper, um serviço de coordenação de processos de aplicações em sistemas distribuídos); testar os algoritmos que percebem blocos indisponíveis e reconstroem as réplicas (se indisponíveis); esta fase será executada em ambiente virtualizado;
+
+   \item [testes de desempenho, de tamanho do armazenamento e de injeção de falhas] obter uma aproximação do tamanho do armazenamento (dados e paridade) para conjuntos de arquivos que ocupem espaço original do tamanho de alguns gigabytes e terabytes; esta fase será executada em ambiente o mais real possível.
+
+\end{description}
+
+Os algoritmos de codificação e de decodificação poderão permitir parametrizar:
+
+\begin{itemize}
+
+   \item número de pedaços que o bloco original é dividido antes da geração dos blocos codificados
+   \item número de blocos de paridade (redundância)
+   \item fator de replicação
+%\footnote{Este parâmetro é atualmente configurado no HFS como dfs.replication.}
+\end{itemize}
+
+\input{cronograma}
+
+% \subsection{Vantagens e Limitações deste trabalho}
+
+% O modelo estudado neste trabalho envolve canal binário, simétrico e sem memória.
+
+% Segundo \cite{Woitaszek:2007}, para sistemas de armazenamento, a codificação por apagamento baseada em operações simples, tais como XOR RAID e códigos Tornado, são preferíveis. Apesar de que um mecanismo externo deva ser utilizado para detectar erros, as operações de XOR podem ser realizadas rapidamente e resultar em alto \emph{throughput} das operações de codificação e decodificação.
+
+% As codificações de blocos que serão estudadas e implementadas são: códigos Reed-Solomon (modelo 3 e proposta 4) e códigos Tornado (proposta 5). São algoritmos muito estudados e com conhecidas implementações.
+
+\subsection{Contribuições deste trabalho}
+
+\subsubsection*{\emph{Overview} de Codificação por Apagamento}
+
+A revisão bibliográfica desse tema tem exigido tempo e dedicação, devido a existência de poucas pesquisas experimentais publicadas sobre o tema. Uma dificuldade encontrada por quem estuda codificação por apagamento é que não existe uma nomenclatura unificada \cite{Plank:2009}. Também segundo \cite{CS540:2010}, existem poucos pesquisadores que são programadores de sistemas e que fazem propostas neste tema.
+
+% Uma classificação para códigos de blocos pode ser encontrada na figura~\ref{fig4:cbc}.
+
+%    \begin{figure}[h]
+%      \centering
+%      \includegraphics[scale=1]{blockcodes.png}
+%      \caption{Uma classificação para códigos de blocos \cite{MathWorks:2010}}
+%      \label{fig4:cbc}
+%    \end{figure} 
+
+Uma classificação para códigos de blocos pode ser encontrada em \cite{MathWorks:2010}.
+
+\subsubsection{Submeter as alterações e sugestões como contribuição ao Hadoop}
+
+As alterações e sugestões para uso das codificações por apagamento no
+Hadoop serão propostas a comunidade por meio do site da Apache
+\emph{Software Foundation}, como foi proposta a versão inicial de
+codificação por apagamento no HDFS~\cite{HDFS-503:2010} e a segunda
+versão com códigos Reed-Solomon~\cite{MR-1969:2010}.
+

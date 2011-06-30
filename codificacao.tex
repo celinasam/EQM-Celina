@@ -1,0 +1,182 @@
+\section{Codificação por Apagamento}
+
+A codificação de mensagens no emissor antes da transmissão e a
+decodificação das mensagens (possivelmente danificadas) que chegam ao
+receptor, possibilita reparar os efeitos de um canal físico com ruídos
+\cite{Shannon:1948} sem sobrecarregar a taxa de transmissão de
+informação ou o \emph{overhead} de armazenamento \cite{Lin:1983}.
+
+% A ideia básica da codificação ótima por apagamento é que o objeto
+% original possa ser reconstruído a partir de quaisquer $m$ únicos
+% fragmentos que são aproximadamente do mesmo tamanho do objeto original
+% \cite{Weatherspoon:2002}. Para uma codificação quase ótima, são
+% necessários $(1+e) \times m$ fragmentos, onde $e \geq 1$
+% \cite{EC:2010}.
+
+%Um dos principais parâmetros de um código para detecção de erros é a
+%probabilidade de detecção de erro.
+
+% A probabilidade de erro no canal determina a capacidade de
+% transferência de informação no canal. Os modelos estudados por
+% pesquisadores envolvem canais simétricos, assimétricos e outros, com
+% ou sem memória~\cite{Weber:1985}. 
+
+%Em canais binários simétricos, assume-se que ambos os erros $0
+%\rightarrow 1$ e $1 \rightarrow 0$ ocorrem com igual probabilidade.
+
+Existem dois métodos básicos para tratar erros em comunicação e ambos
+envolvem a codificação de mensagens. A diferença está em como esses
+códigos são utilizados. Em um \emph{repeat request system}, os códigos
+são utilizados para detectar erros e se estes existirem, é feito um
+pedido de retransmissão. Com \emph{forward error correction}, os
+códigos são usados para detectar e corrigir erros.
+
+Na Figura~\ref{fig3:fec}, vemos um sistema que utiliza código de
+blocos. A fonte envia uma sequência de dados para o codificador. O
+codificador divide esta sequência em $m$ blocos de $k$ \emph{bits}
+cada chamados mensagens.  Uma mensagem é representada por uma
+$k$-tupla binária $u = u_1, u_2,\dots, u_k$. O codificador insere
+\emph{bits} redundantes (ou de paridade) para cada mensagem $u$,
+gerando uma sequência de saída de $n$ \emph{bits} chamada
+\emph{codeword} ou palavra código representada por uma $n$-tupla de
+símbolos discretos $v = v_1, v_2, \dots, v_n$.  Os $n - k$ bits são os
+bits redundantes que provêm à codificação a capacidade de tratar os
+ruídos do canal.
+
+\begin{figure}[htb]
+  \setlength{\unitlength}{1cm}
+  \begin{center}
+  {\begin{picture}(12.5,6)(0,-3)
+    \put(0,2){\framebox(3,1){Fonte}}
+    \put(3,2.5){\vector(1,0){2}}
+    \put(4,2.6){u}
+    \put(5,2){\framebox(4,1){{Codificador (n,k)}}}
+    \put(9,2.5){\line(1,0){2}}
+    \put(10,2.6){v}
+    \put(11,2.5){\vector(0,-1){2}}
+    \put(9.5,-0.5){\framebox(3,1){Canal}}
+    \put(6.8,-0.1){ruídos}
+    \put(8,-0){\vector(1,0){1.5}}
+    \put(11,-0.5){\line(0,-1){2}}
+    \put(11,-2.5){\vector(-1,0){2}}
+    \put(10,-2.4){r}
+    \put(0,-3){\framebox(3,1){Destino}}
+    \put(5,-2.5){\vector(-1,0){2}}
+    \put(4,-2.4){$\mathaccent 94 u$}
+    \put(5,-3){\framebox(4,1){{Decodificador (n,k)}}}
+   \end{picture}}
+  \end{center}
+  \caption{Códigos de bloco}
+  \label{fig3:fec}
+\end{figure}
+
+
+% A geração de uma palavra código depende apenas de um cálculo algébrico entre os $k$ bits, portanto, um codificador pode ser implementado como um circuito lógico combinacional. O codificador executa o mapeamento: $T :  U \rightarrow V$ onde $U$ é um conjunto de palavras de dados de tamanho $k$ e $V$ é um conjunto de palavras código de tamanho $n$ onde $n > k$. Cada uma das $2^k$ palavras de dados é mapeada para uma única palavra código.
+
+A taxa de codificação e o \emph{overhead} de armazenamento são
+calculados a partir de $m$ blocos originais \cite{RTAD:2007,
+  CMSC:2010}. São gerados $n$ símbolos pelo algoritmo de
+codificação. $R = \frac{k}{n}$ é a taxa de codificação que pode ser
+interpretada como o número de bits de informação por palavra código
+transmitida e $O = \frac{1}{R}$ é o \emph{overhead} de armazenamento.
+
+% Se $k \leq n$, mais bits redundantes podem ser adicionados, com aumento do tamanho da palavra código, mantendo $R = \frac{k}{n}$ constante. Como escolher este número $n - k$ de bits redundantes para obter transmissão confiável em cima de um canal com ruídos é o problema principal do projeto do codificador. No destino, o decodificador extrai a sequência original de dados.
+
+Outra métrica utilizada é a redundância que pode ser definida por
+$\frac{(n - k)}{n}$. A alta redundância aumenta a possibilidade de
+todos os dados serem enviados em uma única transmissão. A desvantagem
+da redundância é que a adição de \emph{bits} pode exigir uma largura
+de banda transmissão maior ou aumentar o atraso das mensagens (ou
+ambos).
+
+Segundo \cite{Woitaszek:2007}, para sistemas de armazenamento, a
+codificação por apagamento baseada em operações simples, tais como XOR
+RAID, são preferíveis. Embora um mecanismo externo deva ser utilizado
+para detectar erros, as operações de XOR podem ser realizadas
+rapidamente e resultar em alto \emph{throughput} das operações de
+codificação e decodificação.
+
+Segundo \cite{Almeida:2007}, códigos Reed-Solomon (RS) são
+particularmente úteis para correção de erros em rajada (seqüência
+símbolos consecutivos, nenhum desses recebidos corretamente, chamados
+\emph{burst errors}). Também podem ser usados eficientemente em canais
+em que o conjunto de símbolos de entrada é consideravelmente grande.
+
+Códigos Tornado são uma classe de códigos LDPC (Low Density Parity
+Check) que utiliza grafos irregulares e que foi proposta por
+M. Luby~\cite{Woitaszek:2007}. Segundo~\cite{Kubiatowicz:2000}, são
+mais rápidos para codificar e decodificar e necessitam de um pouco
+mais de $m$ fragmentos para reconstruir a informação. Em
+\cite{Byers:1998}, o autor comentou o tempo de decodificação para
+códigos RS e Tornado. Códigos Tornado usam equações com um número
+pequeno de variáveis em contraste com códigos RS.
+
+Na tabela~\ref{tab1:comp}, alguns sistemas que utilizam com
+codificação por apagamento foram comparados.
+
+\input{tabela}
+
+\subsection*{Replicação versus Codificação por Apagamento}
+
+Para implementar redundância de dados em sistemas, são utilizadas
+várias técnicas: codificação por apagamento, replicação, espelhamento,
+\emph{Cyclic redundancy check} (CRC), \emph{bits} de paridade,
+\emph{checksum} e assinatura digital. Mecanismos de
+redundância podem implementar um conjunto destas
+técnicas~\cite{Fan:2009}.
+
+A principal desvantagem da replicação é que ela requer um grande
+\emph{overhead} de armazenamento para pouco ganho em disponibilidade e
+tolerância a falhas. Garantir que os dados permaneçam disponíveis
+quando todos os $n$ dispositivos falham exige que, pelo menos, $n + 1$
+cópias existam~\cite{Woitaszek:2007}. Em \cite{Haeberlen:2005}, os
+experimentos mostraram que o armazenamento no sistema Glacier
+utilizando replicação pura obteve um aumento de 11 vezes na quantidade
+de dados armazenados para conseguir 0.999999\% de confiabilidade. Um
+cálculo da medida da quantidade de redundância da replicação pura e da
+codificação chamada \emph{stretch factor} e a respectiva
+disponibilidade pode ser encontrado em \cite{Bhagwan:2003}.
+
+Os autores em \cite{Dabek:2004} afirmam que dados replicados permitem
+leituras de baixa latência, porque há muitas opções para a seleção de servidores,
+enquanto que dados codificados reduzem o consumo de largura de banda para escritas,
+em detrimento do aumento da latência de leituras.
+
+Uma vantagem de codificação por apagamento seria um custo menor de
+armazenamento se comparado a replicação, no caso de grande volume de
+dados. Outra vantagem com relação a replicação foi comentada em
+\cite{Weatherspoon:2002}: para um mesmo espaço de armazenamento, o
+tempo médio entre falhas (\emph{mean time to failure}) é maior.
+
+Em \cite{Kubiatowicz:2000} e \cite{Weatherspoon:2002}, os pesquisadores concluem
+que o uso de codificação por apagamento aumenta significativamente a disponibilidade de dados.
+
+A Figura~\ref{fig4:srp} apresenta um sistema de arquivos distribuídos armazenando um arquivo particionado em 8 blocos. O fator de replicação é 4. Os clientes precisam que, para cada um dos 8 distintos blocos, uma das quatro cópias esteja disponível. A Figura~\ref{fig5:crs} apresenta o mesmo sistema que a Figura~\ref{fig4:srp}, mas utilizando códigos RS. O arquivo está particionado em 8 blocos e 32 blocos codificados foram gerados. Os clientes podem utilizar quaisquer 8 blocos para obter o arquivo inicial. A Figura~\ref{fig5:crs} também se aplica a códigos Tornado.
+
+   % \begin{figure}[htb] % Duas figuras lado a lado
+   %     \begin{minipage}[b]{0.48 \linewidth}
+   %         \includegraphics[scale=.4]{replicacao-pura.jpg}
+   %         \caption{Sistema com replicação pura \cite{Plank:2004}}
+   %         \label{fig4:srp}
+   %     \end{minipage}\hfill
+   %     \begin{minipage}[b]{0.48 \linewidth}
+   %         \includegraphics[scale=.4]{codigos-RS.jpg}
+   %         \caption{Sistema com códigos RS \cite{Plank:2004}}
+   %         \label{fig5:crs}
+   %     \end{minipage}
+   % \end{figure}
+
+
+   \begin{figure}[h]
+     \centering
+     \includegraphics[scale=.6]{replicacao-pura.jpg}
+     \caption{Sistema com replicação pura \cite{Plank:2004}}
+     \label{fig4:srp}
+   \end{figure}
+
+   \begin{figure}[h]
+     \centering
+     \includegraphics[scale=.6]{codigos-RS.jpg}
+     \caption{Sistema com códigos RS \cite{Plank:2004}}
+     \label{fig5:crs}
+   \end{figure}

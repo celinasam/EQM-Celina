@@ -1,0 +1,58 @@
+\section{Introdução}
+
+A codificação por apagamento (\emph{erasures codes}) introduz
+redundância em um sistema de transimissão ou armazenamento de dados de
+maneira a permitir a detecção e correção de erros. A codificação por
+apagamento é, desde os anos 70, utilizada pela \emph{NASA's Deep Space
+  Network} para receber sinais e dados de telemetria
+(\emph{downlinks}) vindos de veículos espaciais (\emph{very distant
+  spacecrafts}) e para enviar telecomandos (\emph{uplinks}) para
+veículos espaciais \cite{Almeida:2007, STO:2010, TDD:2010}.
+
+A técnica de codificação por apagamento pode ser combinada com a
+distribuição de dados entre vários dispositivos de armazenamento, o
+que permite o aumento da largura de banda e a correção de
+erros~\cite{Woitaszek:2007, Plank:1997}. Requisitos de confiabilidade
+e de redução do tamanho do armazenamento podem ser observados em
+sistemas que tratam de: \emph{digital fountain} (\emph{multicasting}
+multimídia confiável)\cite{Byers:1998}; \emph{Delay and Disruption
+  Tolerant Networks}, redes de sensores e redes~\emph{peer-to-peer}
+\cite{Rodrigues:2005, RTAD:2007, Houri:2009} e armazenamento de grande
+volume de dados \cite{Kubiatowicz:2000, Weatherspoon:2002, Fan:2009},
+como também o sistemas de arquivos distribuído do Hadoop
+(HDFS)~\cite{HDFS-503:2010}.
+
+O HDFS, por padrão, implementa alta disponibilidade dos dados via
+replicação simples dos blocos de dados. Esta abordagem acarreta um
+alto custo de armazenamento para garantir que os dados estarão sempre
+disponíveis. O objetivo do uso da codificação por apagamento no HDFS é
+permitir que o espaço de armazenamento possa ser reduzido sem
+prejudicar a disponibilidade dos dados. Esforços iniciais nessa linha
+foram feitos utilizando técnicas de RAID~\cite{HDFS-503:2010} e mais
+recentemente do algoritmo Reed-Solomon~\cite{MR-1969:2010}.
+
+Este trabalho pretende avançar esta linha de pesquisa a partir dos
+seguintes passos:
+
+\begin{itemize}
+\item avaliação de desempenho, ganhos, e custos de diferentes
+  estratégias de codificação por apagamento;
+
+\item implementação de otimizações ou extensões para o código que
+  atualmente implementa Reed-Solomon, tentando melhorar,
+  principalmente, a parte de distribuição de blocos;
+
+\item implementação de novos algoritmos (e.g., Tornado codes) e
+  extenção da interface atual para aceitá-los;
+
+\item integração do código atual com o HDFS.
+
+\end{itemize}
+
+O texto a seguir está organizado da seguinte maneira: a Seção 2
+introduz os conceitos básicos da codificação por apagamento, a Seção 3
+comenta o \emph{framework} Hadoop e seu sistema de arquivos, a Seção 4
+apresenta os objetivos deste trabalho e a seção 5 cita as atividades
+propostas e o cronograma de execução.
+
+

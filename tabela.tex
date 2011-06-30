@@ -1,0 +1,27 @@
+
+\begin{table}
+\singlespacing
+
+  \begin{center}
+    \begin{tabular}{|p{2.5cm}||p{2cm}||p{2.7cm}||p{2.5cm}||p{3.5cm}|}
+      \hline
+
+Trabalho & Modelo & Objetivos & Codificação & Métricas \\ \hline
+Byers,1998 \cite{Byers:1998} & \emph{Digital Fountain} & Confiabilidade, Eficiência & Replicação, códigos Tornado e RS & tempo de codificação e decodificação de um bloco \emph{bandwidth}, perda de pacotes\\ \hline
+
+Weatherspoon, 2002 \cite{Weatherspoon:2002} & Arquivador central, nós & Disponibilidade & Replicação, Codificação por Apagamento & tempo médio entre falhas, \emph{overhead} de armazenamento, tempo de verificação do bloco \\ \hline
+
+Camargo, 2009 \cite{Camargo:2009} & OppStore & Confiabilidade, Disponibilidade & Replicação  & \emph{bandwidth}, número de mensagens trocadas \\ \hline
+
+Fan, 2009 \cite{Fan:2009}& HDFS & Confiabilidade, Disponibilidade & Replicação, RAID & atraso na codificação do bloco\\ \hline
+
+Dabek, 2004 \cite{Dabek:2004} & DHT & Eficiência & Replicação, Codificação por Apagamento & latência \\ \hline
+
+Houri, 2009 \cite{Houri:2009} & \emph{Peer-to-peer} & Disponibilidade & Replicação, Codificação por Apagamento & \emph{bandwidth} \\ \hline
+
+Plank, 2009 \cite{Plank:2009} & $k$ discos de dados e $m$ discos de paridade & Eficiência & códigos Tornado, RS e RAID & tempo de codificação de um grande arquivo de vídeo e tempo de decodificação de um \emph{drive} de dados\\ \hline
+    \end{tabular}
+\caption{Comparação entre sistemas de codificação por apagamento}
+\label{tab1:comp}
+  \end{center}
+\end{table}

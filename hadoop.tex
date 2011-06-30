@@ -1,0 +1,129 @@
+\section{Hadoop}
+
+Atualmente, o Google é uma empresa de consulta e publicidade e é capaz de fornecer os seus serviços devido a investimentos em armazenamento distribuído em larga escala e a capacidade de processamento, estes desenvolvidos \emph{in-house}.
+
+Essa capacidade é fornecida por um grande número de PCs, pelo Google File System (GFS), um sistema de arquivos redundantes em \emph{cluster}, pelo sistema operacional GNU/Linux e pelo MapReduce, um \emph{middleware} de processamento paralelo de dados.
+
+Em 2004, um artigo~\cite{Dean:2004}, que foi publicado por
+profissionais da Google, propôs o MapReduce. Em 2006, estes
+profissionais, juntamente com Doug Cutting do Yahoo!, formaram um
+sub-projeto do Apache Lucene\footnote{http://www.apache.org} que foi
+chamado Hadoop\footnote{http://hadoop.apache.org/}.
+
+Mais recentemente, o projeto Apache Hadoop tem desenvolvido uma
+reimplementação de partes do GFS e MapReduce e muitos grupos da
+comunidade de software livre posteriormente abraçaram essa tecnologia,
+permitindo-lhes fazer coisas que eles não poderiam fazer em máquinas
+individuais. O Hadoop está disponível em código fonte sob
+licenciamento Apache \emph{license} (compatível com GPL).
+
+O Hadoop é um \emph{framework} para executar aplicações em
+armazenamento distribuído de grande volume de dados que pode ser
+construído com \emph{commodity hardware}, que é facilmente acessível e
+disponível.  O Hadoop não é um \emph{framework} canônico. Ele foi
+projetado para aplicações que atualizam dados da seguinte forma: uma
+escrita e muitas leituras, através de acessos por \emph{batch}, com
+tamanho da ordem de petabytes, organizados de forma não estruturada,
+com esquema dinâmico e integridade baixa.  Uma lista de aplicações e
+organizações que usam o Hadoop pode ser encontrada em
+\cite{HadoopWiki:2010}.
+
+Em poucas palavras, o Hadoop disponibiliza um armazenamento
+compartilhado (HDFS) e um sistema de análise (MapReduce) que compõem o
+seu \emph{kernel}.
+
+\subsection{MapReduce}
+
+O MapReduce utiliza algoritmos de ordenação para reconstruir sua base de dados.  Um bom uso para o MapReduce são aplicações cujos dados são escritos uma vez e lidos muitas vezes. São dados não estruturados como texto ou imagens. O MapReduce tenta colocar esses dados no nó onde são feitas as computações, desta forma, o acesso aos dados é rápido, pois é local \cite{White:2009}.
+
+O MapReduce pode resolver problemas genéricos, cujos dados podem ser divididos em matrizes de dados, para cada matriz a mesma computação necessária (sub-problema) e não existe necessidade de comunicação entre as tarefas (sub-problemas). A execução de um típico \emph{job} do MapReduce pode ser assim descrita:
+
+\begin{itemize}
+    \item Iteração sobre um número grande de registros
+    \item Map extrai algo de cada registro (chave, valor)
+    \item Rearranjo (\emph{shuffle}) e ordenação de resultados intermediários por (chave, valor)
+    \item Reduce agrega os resultados intermediários
+    \item Geração da saída
+\end{itemize}
+
+Um programas para execução no HFS/MapReduce que podem ser escritos em várias linguagens como Java, Ruby, Python e C++.
+
+
+\subsection{Arquitetura do Hadoop \emph{Distributed File System}}
+
+Um \emph{cluster} do HDFS é composto por um único NameNode, um
+servidor-mestre que gerencia o sistema de arquivos e controla o acesso
+aos arquivos de clientes. Há uma série de DataNodes, geralmente um por
+nó do \emph{cluster}, que gerenciam o armazenamento anexado ao nó em
+que são executados. A Figura~\ref{fig6:hfs} mostra o NameNode e os
+DataNodes.
+
+Uma típica arquitetura de rede em dois níveis para um \emph{cluster}
+Hadoop é construída por vários \emph{racks} interligados por um
+comutador como mostra a Figura~\ref{fig5:hc}. Cada \emph{rack} por sua
+vez é formado por vários nós (máquinas) e seus discos, estes também
+interligados por um comutador.
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[scale=0.6]{hadoop-cluster.jpg}
+      \caption{Arquitetura de rede em dois níveis para um cluster Hadoop~\cite{Hadoop:2010}}
+      \label{fig5:hc}
+    \end{figure} 
+
+O NameNode executa operações no sistema de arquivos, como \emph{open}, \emph{close}, \emph{rename} de arquivos e de diretórios.
+
+HDFS disponibiliza espaço para sistema de arquivos e permite que os
+dados do usuário sejam armazenados em arquivos. Internamente, um
+arquivo é dividido em um ou mais blocos e esses blocos são armazenados
+em um conjunto de DataNodes. A Figura~\ref{fig7:hfs} mostra DataNodes
+e seus blocos. O tamanho \emph{default} de cada bloco é 64MB.
+
+    \begin{figure}[htbp]
+      \centering
+      \includegraphics[scale=.6]{HDFS-arquitetura-2.jpg}
+      \caption{Arquitetura do HDFS \cite{TR-IC-10-24}}
+      \label{fig6:hfs}
+    \end{figure} 
+
+Os DataNodes respondem aos pedidos de leitura e escrita de clientes do
+sistema de arquivos e também executam a criação, eliminação e
+replicação de blocos sob instrução do NameNode. O número de réplicas é
+geralmente 3. A 1$^a$ réplica fica local, no mesmo nó do código do
+cliente. A 2$^a$ réplica fica em um nó em outro \emph{rack} e a 3$^a$
+réplica fica nesse último \emph{rack} em outro nó. As 2$^a$ e 3$^a$
+réplicas não são locais ao bloco replicado.
+
+O NameNode e DataNode são partes do \emph{software} projetado para
+rodar em \emph{commodity hardware}. Essas máquinas normalmente
+executam um sistema operacional GNU/Linux.
+
+HDFS é construído usando a linguagem Java. Qualquer máquina que suporte
+Java pode executar o NameNode ou o DataNode \cite{Hadoop:2010}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=.5]{HDFS-arquitetura-replicacao-2.jpg}
+  \caption{Arquitetura do HFS - Datanodes e Blocos \cite{White:2009}}
+  \label{fig7:hfs}
+\end{figure} 
+
+Os protocolos do HDFS usam o protocolo TCP/IP. O cliente fala o
+protocolo ClientProtocol com o NameNode através de uma porta. Os
+DataNodes falam o protocolo DataNodeProtocol com o NameNode. Esses
+protocolos executam uma \emph{Remote Procedure Call} (RPC). O NameNode
+não inicia chamadas RPCs. Ele responde a chamadas RPCs feitas pelo
+DataNodes e pelos clientes.
+
+
+\subsection{Codificação por apagamento}
+
+Existe uma nova característica proposta em 2009 para implementação de
+uma camada de codificação por apagamento no Hadoop utilizando
+RAID~\cite{HDFS-503:2010} e uma mais recente utilizando códigos
+RS~\cite{MR-1969:2010}.
+
+A versão atual do Hadoop utiliza apenas a técnica de replicação
+\cite{White:2009} para obter disponibilidade e confiabilidade de
+dados. A inclusão da codificação por apagamento será feita com o
+objetivo de reduzir o tamanho do armazenamento do HDFS.
