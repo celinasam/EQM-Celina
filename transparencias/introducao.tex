@@ -1,0 +1,40 @@
+ \section{Introdução}
+
+  \begin{frame}{Motivação}
+     \begin{itemize}
+      \item Esta proposta é uma contribuição para \emph{software} livre em sistemas distribuídos.
+      \item Armazenamento de arquivos é um componente essencial na computação de alto desempenho.
+      \item Codificação por apagamento (\emph{Erasure codes}) introduz redundância e tem sido utilizada em sistemas para alcançar confiabilidade e redução do custo de armazenamento.
+     \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Motivação}
+     \begin{itemize}
+      \item Alguns sistemas que utilizam codificação por apagamento:
+	\begin{itemize}
+	   \item \emph{NASA's Deep Space Network} para receber sinais e dados de telemetria (\emph{downlinks}) vindos de veículos espaciais (\emph{very distant spacecrafts}) e para enviar telecomandos (\emph{uplinks}) para veículos espaciais \cite{Almeida:2007, STO:2010, TDD:2010};
+%           \item \emph{Digital Fountain} (\emph{multicasting} multimídia confiável)\cite{Byers:1998}
+           \item \emph{Delay and Disruption Tolerant Networks}, redes de sensores e redes~\emph{peer-to-peer} \cite{RTAD:2007, Rodrigues:2005, Houri:2009};
+           \item armazenamento de grande volume de dados \cite{Kubiatowicz:2000, Weatherspoon:2002, Fan:2009}.
+%           \item sistema de arquivos distribuído do Hadoop (HDFS)~\cite{HDFS-503:2010}
+	\end{itemize}
+     \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Motivação}
+     \begin{itemize}
+      \item O HDFS, por padrão, implementa alta disponibilidade dos dados via replicação simples dos blocos de dados. Esta abordagem acarreta um alto custo de armazenamento para garantir que os dados estarão sempre disponíveis.
+      \item Esforços iniciais nessa linha foram feitos utilizando técnicas de \emph{Redundant Array of Independent Drives} (RAID)~\cite{Patterson:1988,HDFS-503:2010} e mais recentemente do algoritmo Reed-Solomon (RS)~\cite{Reed:1960,MR-1969:2010,MR-1970:2010}.
+     \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Objetivos desta proposta}
+
+  \begin{itemize}
+
+     \item avaliar desempenho das camadas de codificação do hadoop, o tamanho do armazenamento;
+     \item otimizar, estender o código da camada RAID, da camada RS;
+     \item incluir novas codificações como a codificação Tornado e integrar o código atual com o HDFS.
+
+     \end{itemize}
+  \end{frame}

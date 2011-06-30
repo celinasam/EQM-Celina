@@ -1,0 +1,173 @@
+\section{Hadoop}
+  \begin{frame}{Hadoop}
+
+    \begin{figure}[hb]
+      \centering
+      \includegraphics[scale=2]{hadoop-logo.jpg}
+%      \caption{Projeto Hadoop \cite{Hadoop:2010}}
+%      \label{fig5:php}
+    \end{figure}
+
+    \begin{itemize}
+      \item Processar um volume relativamente grande de dados é possível, em poucas horas, com alguns dólares e com algumas máquinas: http://aws.amazon.com/
+      \item Isto também pode ser feito com o Hadoop, um \emph{framework} para processamento de grande volume de dados.
+      \item Volume grande de dados ?
+          \begin{itemize}
+             \item megabyte - $10^6$ - uma foto
+             \item gigabyte - $10^9$ - um DVD armazena 4.7 GB de um filme
+             \item terabyte - $10^{12}$ - 200 filmes
+             \item {\bf petabyte} - $10^{15}$ - dados processados em uma hora pela Google
+             \item exabyte - $10^{18}$
+             \item zettabyte - $10^{21}$ - um disco de 140 GB para cada pessoa no mundo
+          \end{itemize}
+     \end{itemize}
+
+  \end{frame}
+
+  \begin{frame}{Hadoop}
+
+    \begin{figure}[hb]
+      \centering
+      \includegraphics[scale=2]{hadoop-logo.jpg}
+%      \caption{Projeto Hadoop \cite{Hadoop:2010}}
+%      \label{fig5:php}
+    \end{figure}
+
+     \begin{itemize}
+%        \item O Hadoop é um \emph{framework} para executar aplicações em armazenamento distribuído de grande volume de dados e foi por Doug Cutting para ser uma implementação \emph{open source} de algoritmos de motores de busca que trabalham com \emph{web robots} (ou \emph{web crawlers}). Exemplos dessas aplicações: programas que "baixam" páginas da internet para posterior processamento, construção de grafos web e estatísticas das páginas.
+        \item O Hadoop é um \emph{framework} que foi criado por Doug Cutting para ser uma implementação \emph{open source} de algoritmos de motores de busca.
+        \item Facebook, Yahoo, Twitter, Microsoft e IBM e por laboratórios de Universidades: University of Maryland, Cornell University, University of Edinburg, Unicamp \cite{HadoopWiki:2010}
+        \item Apache \emph{Software Foundation}
+     \end{itemize}
+  \end{frame}
+
+%  \begin{frame}{Hadoop}
+%
+%    \begin{figure}[hb]
+%      \centering
+%      \includegraphics[scale=2]{hadoop-logo.jpg}
+%      \caption{Projeto Hadoop \cite{Hadoop:2010}}
+%      \label{fig5:php}
+%    \end{figure}
+%
+%     \begin{itemize}
+%        \item 2002 - Mike Cafarella e Doug Cutting criaram o projeto Nutch
+%        \item 2003 - artigo sobre o Google \emph{File System}
+%        \item 2004 - uma implementação \emph{open source} do GFS: Nutch \emph{Distributed File System} (NDFS) que originou o HDFS
+%         \item 2004 - Google propôs o MapReduce
+%         \item 2006 - NDFS da Google e uma implementação \emph{open source} do MapReduce formaram um sub-projeto a partir do Apache Lucene que foi chamado Hadoop
+%     \end{itemize}
+%  \end{frame}
+
+  \begin{frame}{Hadoop}
+
+    \begin{figure}[hb]
+      \centering
+      \includegraphics[scale=2]{hadoop-logo.jpg}
+%      \caption{Projeto Hadoop \cite{Hadoop:2010}}
+%      \label{fig5:php}
+    \end{figure}
+
+    \begin{itemize}
+        \item O Hadoop não é um \emph{framework} canônico:
+          \begin{itemize}
+             \item Arquitetura é mestre/escravo.
+             \item Projetado para aplicações que atualizam dados da seguinte forma:
+                \begin{itemize}
+                   \item uma escrita e muitas leituras através de acessos por \emph{batch}
+                   \item dados com tamanho da ordem de petabytes, organizados de forma não estruturada,
+com esquema dinâmico e integridade baixa.
+                 \end{itemize}
+             \item As escritas são feitas somente no final do arquivo.
+           \end{itemize}
+        \item Kernel do Hadoop: um armazenamento compartilhado (HDFS) e um sistema de análise (MapReduce)
+     \end{itemize}
+  \end{frame}
+
+ \begin{frame}{Mapreduce}
+    \begin{itemize}
+       \item O MapReduce pode resolver problemas genéricos, cujos dados podem ser divididos em matrizes de dados, para cada matriz a mesma computação necessária (sub-problema) e não existe comunicação entre as tarefas (sub-problemas).\\
+
+       \item Problemas como empacotamento, linha de fábrica, otimização não são resolvidos pelo modelo de computação do MapReduce.
+
+       \item A execução de um típico \emph{job} do MapReduce pode ser assim descrita:
+
+\begin{itemize}
+    \item Iteração sobre um número grande de registros
+    \item Map extrai algo de cada registro (chave, valor)
+    \item Rearranjo (\emph{shuffle}) e ordenação de resultados intermediários por (chave, valor)
+    \item Reduce agrega os resultados intermediários
+    \item Geração da saída
+\end{itemize}
+
+    \end{itemize}
+
+ \end{frame}
+
+% \begin{frame}{Arquitetura do Hadoop Distributed File System}
+%
+%    \begin{figure}[h]
+%      \centering
+%      \includegraphics[scale=0.3]{hadoop-cluster.jpg}
+%      \caption{Arquitetura de rede em dois níveis para um cluster Hadoop~\cite{Hadoop:2010}}
+%      \label{fig5:hc}
+%    \end{figure} 
+%
+% \end{frame}
+
+\begin{frame}{Arquitetura do HDFS}
+    \begin{figure}[htbp]
+      \centering
+      \includegraphics[scale=.3]{HDFS-arquitetura-2.jpg}
+      \caption{Arquitetura do HDFS \cite{TR-IC-10-24}}
+      \label{fig6:hfs}
+    \end{figure} 
+ \end{frame}
+
+\begin{frame}{Arquitetura do HDFS}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=.3]{HDFS-arquitetura-replicacao-2.jpg}
+  \caption{Arquitetura do HFS - \emph{Pipeline} dos Datanodes e Blocos \cite{White:2009}}
+  \label{fig7:hfs}
+\end{figure} 
+
+ \end{frame}
+
+ \begin{frame}{Codificação por Apagamento no HDFS}
+
+  \begin{itemize}
+    \item Em 2009, foi proposta uma implementação de camada de codificação por apagamento no Hadoop utilizando RAID~\cite{HDFS-503:2010} e uma mais recentemente utilizando códigos RS~\cite{MR-1969:2010}.
+    \item A versão atual do Hadoop utiliza apenas a técnica de replicação \cite{White:2009} para obter disponibilidade e confiabilidade de dados. A inclusão da codificação por apagamento será feita com o objetivo de reduzir o tamanho do armazenamento do HDFS.
+  \end{itemize}
+ \end{frame}
+
+ \begin{frame}{Camada RAID - Discussões}
+\begin{itemize}
+   \item Existem discussões sobre o número de blocos por grupo de paridade \cite{MR-2036:2010}.
+   \item O número de blocos por grupo de paridade poderia ser diferente para arquivos pequenos e para arquivos grandes: 80\% dos 7 \emph{clusters} do Yahoo! são arquivos com menos de $8GB$ ($64x128MB$). Enquanto que mais de 75\% do espaço é usado para armazenar diretórios, cujo tamanho (excluindo os sub-diretórios) é mais do que $8GB$ ($64x128MB$).
+    \item O agrupamento poderia ser feito por diretórios de arquivos. 
+\end{itemize}
+     
+\end{frame}
+
+ \begin{frame}{Camada RAID - Discussões}
+\begin{itemize}
+   \item Sobre o arquivo de paridade, ele poderia ser:
+      \begin{itemize}
+         \item 1 - um arquivo de paridade para cada grupo (o uso da memória do namenode aumentaria, pois o número de grupos pode ser grande)
+         \item 2 - um arquivo de paridade é gerado para cada \emph{map} de cada \emph{job} do MapReduce (muitos blocos de paridade poderão ser regerados desnecessariamente em caso de falha)
+         \item 3 - um arquivo de paridade é gerado como em 2, esse arquivo de paridade é divido em vários fragmentos, um para cada bloco de paridade (pode usar muito espaço se o bloco de paridade for pequeno, pois o HDFS ainda não suporta arquivo espalhado)
+      \end{itemize}
+\end{itemize}
+     
+\end{frame}
+
+\begin{frame}{Camadas RS e Tornado - Discussões}
+
+\begin{itemize}
+   \item $n = 4m$ é número de blocos codificados a partir a um bloco inicial
+%   \item bloco codificado $b_{i}$ está armazenado na máquina $d_{i}$, para $1 \leq i \leq n$; a máquina $d_{i}$ e a $d_{i+1}$ são distintas e estão no mesmo rack
+    \item armazenamento dos blocos codificados como no \emph{pipeline} dos blocos replicados
+\end{itemize}
+\end{frame}

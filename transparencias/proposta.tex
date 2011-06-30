@@ -1,0 +1,198 @@
+\section{Proposta}
+
+\begin{frame}{Objetivos}
+
+  \input{objetivo}
+
+\end{frame}
+
+ \begin{frame}{Métodos}
+
+Os testes poderão utilizar:
+
+\begin{itemize}
+\item máquinas do Instituto de Computação da Unicamp, principalmente
+  do LSD (Laboratório de Sistemas Distribuídos);
+\item máquinas do ambiente computacional do CENAPAD-SP (Centro
+  Nacional de Processamento de Alto Desempenho em São Paulo);
+\item a nuvem do AWS (Amazon \emph{Web Services}).
+\end{itemize}
+
+ \end{frame}
+
+ \begin{frame}{Métodos}
+
+{\tiny
+    \begin{table}
+%Proposta/ Modelo & Codificação\phantom{\Large X} & Disponibilidade & Probabilidade de corrupção de um arquivo & Espaço de armazenamento \\ \hline
+
+  \begin{center}
+    \begin{tabular}{|p{1cm}||p{3cm}||p{2cm}||p{2cm}||p{1cm}|} \hline
+1\phantom{\Large X}  & sem codificação, fator replicação = $r$ & baixa em relação ao espaço de armazenamento & $O(p^r)$ & $rx$ \\[2pt] \hline
+
+2\phantom{\Large X}  & Códigos RAID, 1 bloco de paridade, \emph{stripe} = 10 blocos, fator replicação = 2 & permite falha em 1 máquina  & $O(p^4)$ & $2.2x$ \\ \hline
+
+3\phantom{\Large X} & Códigos RS RAID, 4 blocos de paridade, \emph{stripe} = 10 blocos, fator replicação = 1 & permite falha em 4 máquinas & $O(p^5)$ & $1.4x$ \\ \hline
+
+4\phantom{\Large X} & Códigos RS, fator replicação = 4, com $n$ máquinas & permite falha em até $3m$ máquinas & $\Omega(p^{3m+1})$ & $4x$ \\ \hline
+
+5\phantom{\Large X} & Códigos Tornado, fator replicação = 4, com $n$ máquinas & permite falha em até $3m$ máquinas & $\Omega(p^{3m+1})$ & $4x$ \\ \hline
+
+    \end{tabular}
+\caption{Comparação entre algoritmos de codificação por apagamento e replicação}
+\label{tab2:ccr}
+  \end{center}
+
+\end{table}
+
+onde:\\
+%$O$ e $\Omega$: notação assintótica, significando \emph{upper bound} e \emph{lower bound} respectivamente\\
+$p$ = probabilidade de perda do bloco, $0 < p < 1$\\
+$x$ = tamanho do armazenamento em disco de um bloco\\
+$m$ = número de fragmentos do bloco inicial antes da codificação\\
+$n = 4m$ é número de blocos codificados a partir a um bloco inicial\\
+o bloco codificado $b_{i}$ está armazenado na máquina $d_{i}$, para $1 \leq i \leq n$; a máquina $d_{i}$ e a $d_{i+1}$ são distintas e estão no mesmo rack\\
+\emph{stripe} = número de blocos de um arquivo que são combinados em um único bloco de paridade
+}
+
+ \end{frame}
+
+ \begin{frame}{Métodos - Camada RAID - Exemplo do algoritmo de codificação}
+
+O tamanho da \emph{stripe} é 10 blocos e existe um arquivo $/a/arquivo.txt$ com exatamente 10 blocos. Nesse caso, o algoritmo de codificação da camada RAID faz o seguinte:
+
+\begin{itemize}
+\item bloco$[0]\ =$ primeiro bloco
+\item bloco$[1]\ =$ segundo bloco
+\item ...
+\item bloco$[9]\ =$ último bloco
+
+\item bloco\_paridade$\ =$ iniciado com 0 em todos os bytes
+
+\item para i de 0 até número de bytes em um bloco:
+  \begin{itemize}
+     \item para j de 0 até 9:
+      \begin{itemize}
+        \item bloco\_paridade$\ =$ bloco\_paridade$\ xor\ $bloco$[j][i]$
+      \end{itemize}
+  \end{itemize}
+
+\item para i de 0 até 9:
+      \begin{itemize}
+    \item escreva bloco\_paridade no arquivo $/raid/a/arquivo.txt$
+      \end{itemize}
+
+\end{itemize}
+
+ \end{frame}
+
+\begin{frame}{Métodos - Camada RAID - Exemplo do algoritmo de codificação}
+\begin{itemize}
+   \item O número de blocos da \emph{stripe} é parametrizável.
+   \item As operações entre os \emph{bits} de cada bloco em uma \emph{stripe} são realizadas em ordem e os \emph{bits} de cada operação são gravados em blocos diferentes de paridade.
+    \item Os blocos de paridade ficam armazenados em um arquivo de paridade.
+    \item Existe um mapeamento um-para-um entre o arquivo e seu arquivo de paridade.
+\end{itemize}
+
+ \end{frame}
+
+\begin{frame}{Métodos}
+
+\begin{itemize}
+   \item \emph{Code Review Checklist} segue Java \emph{Code Conventions} de 1997
+
+   \item Após revisão, é sugerido marcar a \emph{Reviewed flag} na discussão do Jira
+\end{itemize}
+
+\end{frame}
+
+ \begin{frame}{Forma de Análise dos Resultados}
+
+Nós poderemos utilizar alguns \emph{e-books} do Projeto Gutenberg e do
+Portal Domínio Público como entrada de dados de alguns dos testes:
+
+\begin{description}
+   
+\item [Teste de funcionalidade] dos algoritmos de codificação e de
+    decodificação RS e da codificação Tornado
+
+     % com dois PCs interconectados (via porta serial, padrão RS-232 ou
+     % via porta USB), sob sistema operacional GNU/Linux e e representar
+     % o que acontece de algum modo: arquivo de log, animação.
+
+   \item [Teste \emph{cluster} Hadoop  0.21.0] que utiliza apenas replicação
+
+   \item [Teste \emph{cluster} Hadoop 0.21.0 com a camada RAID] que utiliza replicação e codificação por apagamento \cite{HDFS-503:2010}
+
+   \item [Teste \emph{cluster} Hadoop 0.22.0 com a camada RS] que utiliza replicação e codificação por apagamento \cite{MR-1969:2010,MR-1970:2010}
+
+    \item [Teste \emph{cluster} Hadoop com a camada Tornado] que utiliza replicação e codificação por apagamento
+
+
+\end{description}
+
+ \end{frame}
+
+\begin{frame}{Forma de Análise dos Resultados}
+Estamos prevendo duas fases de teste:
+
+\begin{description}
+
+   \item [testes de funcionalidade e de injeção de falhas] testar os algoritmos que criam  os blocos codificados (dados e redundância) e os mantêm; testar os algoritmos que atendem os pedidos de leitura de blocos codificados em diferentes codificações; testar os algoritmos que percebem réplicas indisponíveis e as reconstroem a partir dos blocos codificados (para isso utilizar possivelmente o Zookeeper, um serviço de coordenação de processos de aplicações em sistemas distribuídos); testar os algoritmos que percebem blocos indisponíveis e reconstroem as réplicas (se indisponíveis); esta fase será executada em ambiente virtualizado;
+\end{description}
+\end{frame}
+
+\begin{frame}{Forma de Análise dos Resultados}
+\begin{description}
+
+   \item [testes de desempenho, de tamanho do armazenamento e de injeção de falhas] obter uma aproximação do tamanho do armazenamento (dados e paridade) para conjuntos de arquivos que ocupem espaço original do tamanho de alguns gigabytes, terabytes e petabytes; medir o tempo de latência de leitura de arquivos; esta fase será executada em ambiente o mais real possível.
+
+\end{description}
+\end{frame}
+
+\begin{frame}{Forma de Análise dos Resultados}
+Os algoritmos de codificação e de decodificação poderão permitir parametrizar:
+
+\begin{itemize}
+%   \item número de pedaços que o bloco original é dividido antes da geração dos blocos codificados
+   \item número de blocos de paridade (redundância);
+   \item fator de replicação.
+%\footnote{Este parâmetro é atualmente configurado no HFS como dfs.replication.}
+\end{itemize}
+\end{frame}
+
+ \begin{frame}{Plano de Trabalho e Cronograma}
+    \input{cronograma}
+ \end{frame}
+
+ \begin{frame}{Contribuições esperadas}
+
+   \begin{itemize}
+      \item \emph{Overview} de Codificação por Apagamento - são poucas as pesquisas experimentais publicadas sobre o tema; não existe uma nomenclatura unificada; poucos pesquisadores, que são programadores de sistemas, fazem propostas neste tema.
+      \item Submeter as alterações e sugestões como contribuição ao Hadoop através de pequenos \emph{patchs}.
+      \item Algumas das ferramentas que a comunidade de mantenedores usa:
+         \begin{itemize}
+             \item jira, \emph{issue tracking and project tracking for software development teams}, sistema proprietário da Atlassian;
+             \item git, sistema de controle de versão, licença gpl, histórico de \emph{commits} ;
+             \item svn (subversion), sistema de controle de versão, licença apache, repositório oficial do hadoop.
+         \end{itemize}
+   \end{itemize}
+ \end{frame}
+
+ \begin{frame}{Interação com a comunidade}
+   \begin{itemize}
+      \item As versões do hadoop relacionadas a esta proposta: 0.20.1, 0.21.0 e 0.22.0 do Hadoop
+      \item Analisadas um pouco mais de 120 discussões do jira
+      \item Buscas no jira issues.apache.org/, selecionando projeto "Hadoop Map/Reduce" e componente "contrib/raid", mostram algumas discussões sobre as camadas de codificação por apagamento
+      \item camada RAID: versão 0.21.0 (discussão HDFS-503)
+      \item codificação RS: versão 0.22.0 (discussões MAPREDUCE-1969 e MAPREDUCE-1970)
+      \item codificação Tornado: possivelmente em versões futuras
+   \end{itemize}
+ \end{frame}
+
+ \begin{frame}{Interação com a comunidade}
+   \begin{itemize}
+      \item Existe um grupo de contribuidores (de várias empresas como Cloudera, Facebook, Yahoo e de universidades como \emph{University of} Waterloo e Carnegie Mellow \emph{University}) da camada RAID, dos quais, destacamos Rodrigo Schmidt, ex-aluno do programa de pós-graduação deste Instituto, que sugeriu o tema deste trabalho e que tem contribuído com várias idéias para a realização deste trabalho.
+      \item Esperamos interação e colaboração com os desenvolvedores.
+   \end{itemize}
+ \end{frame}

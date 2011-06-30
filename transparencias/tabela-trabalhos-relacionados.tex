@@ -1,0 +1,29 @@
+{\tiny
+\begin{table}
+%\singlespacing
+  \setlength{\unitlength}{0.9cm}
+  \begin{center}
+     \begin{tabular}{|p{1.5cm}||p{1cm}||p{1.5cm}||p{2cm}||p{2cm}|}
+      \hline
+
+Trabalho & Modelo & Objetivos & Codificação & Métricas \\ \hline
+Byers,1998 \cite{Byers:1998} & \emph{Digital Fountain} & Confiabilidade, Eficiência & Replicação, códigos Tornado e RS & tempo de codificação e decodificação de um bloco, \emph{bandwidth}, perda de pacotes\\ \hline
+
+Weatherspoon, 2002 \cite{Weatherspoon:2002} & Arquivador central, nós & Disponibilidade & Replicação, Codificação por Apagamento & tempo médio entre falhas, \emph{overhead} de armazenamento, tempo de verificação do bloco \\ \hline
+
+Dabek, 2004 \cite{Dabek:2004} & DHT & Eficiência & Replicação, Codificação por Apagamento & latência \\ \hline
+
+Camargo, 2009 \cite{Camargo:2009} & OppStore & Confiabilidade, Disponibilidade & Replicação  & \emph{bandwidth}, número de mensagens trocadas \\ \hline
+
+Fan, 2009 \cite{Fan:2009}& HDFS & Confiabilidade, Disponibilidade & Replicação, RAID & \emph{overhead} de armazenamento\\ \hline
+
+Houri, 2009 \cite{Houri:2009} & \emph{Peer-to-peer} & Disponibilidade & Replicação, Codificação por Apagamento & \emph{bandwidth} \\ \hline
+
+Plank, 2009 \cite{Plank:2009} & $k$ discos de dados e $m$ discos de paridade & Eficiência & códigos Tornado, RS e RAID & tempo de codificação de um grande arquivo de vídeo e tempo de decodificação de um \emph{drive} de dados\\ \hline
+Esta proposta & HDFS e MapReduce & Redução do custo de armazenamento & Replicação, códigos RAID, RS e Tornado & \emph{overhead} de armazenamento, tempo de latência de leitura de arquivos\\ \hline
+    \end{tabular}
+\caption{Comparação entre sistemas de codificação por apagamento}
+\label{tab1:comp}
+  \end{center}
+\end{table}
+}

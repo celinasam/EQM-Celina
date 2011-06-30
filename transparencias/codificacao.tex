@@ -1,0 +1,119 @@
+\section{Codificação por Apagamento}
+
+\begin{frame}{Codificação por Apagamento}
+     \begin{itemize}
+%        \item A codificação de mensagens no emissor antes da transmissão e a decodificação das mensagens (possivelmente danificadas) que chegam ao receptor, possibilita reparar os efeitos de um canal físico com ruídos \cite{Shannon:1948} sem sobrecarregar a taxa de transmissão de informação ou o \emph{overhead} de armazenamento \cite{Lin:1983}.
+        \item Shannon demonstrou essa teoria em artigo do Bell System Technical Journal \cite{Shannon:1948} de 1948.
+
+        \item Existem dois métodos básicos para tratar erros em comunicação e ambos envolvem a codificação de mensagens. A diferença está em como esses códigos são utilizados:
+           \begin{itemize}
+              \item Em um \emph{repeat request system}, os códigos são utilizados para detectar erros e se estes existirem, é feito um pedido de retransmissão.
+              \item Com \emph{forward error correction}, os códigos são usados para detectar e corrigir erros.
+           \end{itemize}
+\end{itemize}
+  \end{frame}
+
+\begin{frame}{Codificação por Apagamento}
+%     \begin{itemize}
+%        \item Na Figura~\ref{fig3:fec}, vemos um sistema que utiliza códigos de bloco.
+%\end{itemize}
+\begin{figure}[htb]
+  \setlength{\unitlength}{0.9cm}
+  \begin{center}
+  {\begin{picture}(12.5,6)(0,-3)
+    \put(0,2){\framebox(3,1){Fonte}}
+    \put(3,2.5){\vector(1,0){2}}
+    \put(4,2.6){u}
+    \put(5,2){\framebox(4,1){{Codificador (n,k)}}}
+    \put(9,2.5){\line(1,0){2}}
+    \put(10,2.6){v}
+    \put(11,2.5){\vector(0,-1){2}}
+    \put(9.5,-0.5){\framebox(3,1){Canal}}
+    \put(6.8,-0.1){ruídos}
+    \put(8,-0){\vector(1,0){1.5}}
+    \put(11,-0.5){\line(0,-1){2}}
+    \put(11,-2.5){\vector(-1,0){2}}
+    \put(10,-2.4){r}
+    \put(0,-3){\framebox(3,1){Destino}}
+    \put(5,-2.5){\vector(-1,0){2}}
+    \put(4,-2.4){$\mathaccent 94 u$}
+    \put(5,-3){\framebox(4,1){{Decodificador (n,k)}}}
+   \end{picture}}
+  \end{center}
+  \caption{Códigos de bloco}
+  \label{fig3:fec}
+\end{figure}
+
+  \end{frame}
+
+\begin{frame}{Sistema de arquivos distribuídos armazenando um arquivo - Replicação Simples}
+   \begin{figure}[h]
+     \centering
+     \includegraphics[scale=.4]{replicacao-pura.jpg}
+     \caption{Sistema com replicação simples \cite{Plank:2004}}
+     \label{fig4:srp}
+   \end{figure}
+\end{frame}
+
+\begin{frame}{Sistema de arquivos distribuídos armazenando um arquivo - Codificação por Apagamento}
+   \begin{figure}[h]
+     \centering
+     \includegraphics[scale=.4]{codigos-RS.jpg}
+     \caption{Sistema com codificação por apagamento \cite{Plank:2004}}
+     \label{fig5:crs}
+   \end{figure}
+\end{frame}
+
+ \begin{frame}{RAID-5}
+    \begin{figure}[hb]
+      \centering
+      \includegraphics[scale=0.35]{raid5.jpg}
+      \caption{RAID-5: 1 bloco de paridade e \emph{stripe} = 4 blocos \cite{MR-2036:2010}}
+      \label{fig5:raid5}
+    \end{figure}
+ \end{frame}
+
+ \begin{frame}{RAID-6}
+    \begin{figure}[hb]
+      \centering
+      \includegraphics[scale=0.32]{raid6.jpg}
+      \caption{RAID-6: 2 blocos de paridade e \emph{stripe} = 4 blocos \cite{MR-2036:2010}}
+      \label{fig5:raid6}
+    \end{figure}
+ \end{frame}
+
+\begin{frame}{Codificação RS e Tornado}
+
+\begin{figure}[htb]
+  \setlength{\unitlength}{0.9cm}
+  \begin{center}
+  {\begin{picture}(12.5,6)(0,-3)
+    \put(6,2){\vector(0,-1){1}}
+    \put(6.2,1.2){m}
+    \put(2.9,0){\framebox(7,1){{C\'{a}lculo da palavra codificada mG}}}
+    \put(6,0){\vector(0,-1){2}}
+    \put(6.2,-1.8){c}
+    \put(2,-3){\framebox(9,1){{Escreve palavra c (mensagem e redundância)}}}
+   \end{picture}}
+  \end{center}
+  \caption{Algoritmo de codificação}
+  \label{fig3:feccode}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Decodificação RS e Tornado}
+
+    \begin{figure}[hb]
+      \centering
+      \includegraphics[scale=0.34]{processo-decodificacao-fec.jpg}
+      \caption{Algoritmo de decodificação \cite{AF:2010}}
+      \label{fig5:fecdeco}
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}
+ 
+  \input{tabela-trabalhos-relacionados}
+
+\end{frame}

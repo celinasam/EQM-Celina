@@ -1,0 +1,85 @@
+\documentclass[13pt,compress,c]{beamer}
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{listings}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{relsize}          % for \smaller etc.
+
+
+%\bibliographystyle{plain}
+
+\setbeamercolor{normal text}{bg=blue!4}
+
+%\usetheme{default}
+
+% tema com vermelho
+%\usetheme{CambridgeUS}
+
+% tema com amarelo
+%\usetheme{AnnArbor}
+
+% tema azul
+\usetheme{Boadilla}
+
+% tema azul, aulas de mc348 e mc448
+%\usetheme{Madrid}
+
+% tema mais branco
+%\usetheme{umbc1} 
+
+\title[Codificação por Apagamento no HDFS]{Estudo e Implementação de Mecanismos de Codificação por Apagamento no Sistema de Arquivos Distribuído do Hadoop}
+
+\author[Celina d' Á. Samogin]{Celina d' Ávila Samogin\\
+  Instituto de Computação --- UNICAMP}
+
+\begin{document}
+
+\frame{
+
+   \begin{center}
+     \large{Proposta de Dissertação de Mestrado}
+    \end{center}
+
+    \titlepage
+
+    \begin{center}
+     Orientadora: Profa. Dra. Islene Calciolari Garcia
+    \end{center}
+
+}
+
+
+% \section{Agenda}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+   \frametitle{Agenda}
+   \tableofcontents[currentsection]
+  \end{frame}
+}
+
+
+ \frame{\tableofcontents}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+   \frametitle{Agenda}
+   \tableofcontents[currentsection]
+  \end{frame}
+}
+
+ \input{introducao}
+
+ \input{codificacao}
+
+ \input{hadoop}
+
+ \input{proposta}
+
+\input{referencias}
+
+\end{document}
